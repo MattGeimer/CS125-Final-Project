@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "753622619893",
+    "firebase_url": "https://playlister-for-spotify.firebaseio.com",
+    "project_id": "playlister-for-spotify",
+    "storage_bucket": "playlister-for-spotify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753622619893:android:9a6ff0d6891d6e4a3117bc",
+        "android_client_info": {
+          "package_name": "com.example.playlisterforspotify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753622619893-q87vloc3giflc805n9n6vm58343u0bij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDuRGCm16DVaU0ezS-8vkOj5EMdWVIbcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753622619893-q87vloc3giflc805n9n6vm58343u0bij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
