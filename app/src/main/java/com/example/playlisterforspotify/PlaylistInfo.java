@@ -1,5 +1,6 @@
 package com.example.playlisterforspotify;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -10,7 +11,7 @@ import kaaes.spotify.webapi.android.models.Playlist;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 
 /** Stores and returns information about any playlist given the user's ID and the playlist's ID. */
-public class PlaylistHelper {
+public class PlaylistInfo {
     /** The current playlist. */
     private Playlist playlist;
     /** A List of PlaylistTracks representing all of the tracks of the playlist. */
@@ -41,12 +42,12 @@ public class PlaylistHelper {
     private int timeSignature;
 
     /**
-     * Creates a new PlaylistHelper to store relevant information about a Spotify playlist.
+     * Creates a new PlaylistInfo to store relevant information about a Spotify playlist.
      *
      * @param userID the user's unique ID
      * @param playlistID the playlist's unique ID
      */
-    PlaylistHelper(String userID, String playlistID) {
+    PlaylistInfo(String userID, String playlistID) {
         SpotifyService spotify = new SpotifyApi().getService();
         playlist = spotify.getPlaylist(userID, playlistID);
         tracks = playlist.tracks.items;
@@ -97,11 +98,17 @@ public class PlaylistHelper {
     }
 
     /**
-     * Gets a List of PlaylistTracks representing the tracks of the playlist.
-     * @return list of PlaylistTrack objects
+     * Gets a List of IDs of all of the tracks of the playlist.
+     * @return list of track IDs
      */
-    public List<PlaylistTrack> getTracks() {
-        return tracks;
+    public List<String> getTracks() {
+        List<String> trackIDs = new ArrayList<>(tracks.size());
+
+        for (PlaylistTrack track : tracks) {
+            trackIDs.add(track.track.id);
+        }
+
+        return trackIDs;
     }
 
     /**
