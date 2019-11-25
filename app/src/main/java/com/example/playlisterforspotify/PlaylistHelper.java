@@ -11,8 +11,6 @@ import kaaes.spotify.webapi.android.models.PlaylistTrack;
 
 /** Stores and returns information about any playlist given the user's ID and the playlist's ID. */
 public class PlaylistHelper {
-    /** Implements tons of useful functions such as getPlaylist. */
-    private SpotifyService spotify = new SpotifyApi().getService();
     /** The current playlist. */
     private Playlist playlist;
     /** A List of PlaylistTracks representing all of the tracks of the playlist. */
@@ -49,6 +47,7 @@ public class PlaylistHelper {
      * @param playlistID the playlist's unique ID
      */
     PlaylistHelper(String userID, String playlistID) {
+        SpotifyService spotify = new SpotifyApi().getService();
         playlist = spotify.getPlaylist(userID, playlistID);
         tracks = playlist.tracks.items;
 
