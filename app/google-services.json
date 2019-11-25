@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "753622619893-use9oejer1uq6jbom5s1e0bhvjr0go17.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.playlisterforspotify",
+            "certificate_hash": "fc34b46cb3c6ac7ed8fd5a89604735e38963d38b"
+          }
+        },
+        {
           "client_id": "753622619893-q87vloc3giflc805n9n6vm58343u0bij.apps.googleusercontent.com",
           "client_type": 3
         }
