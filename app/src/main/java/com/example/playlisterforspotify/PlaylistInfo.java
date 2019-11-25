@@ -55,6 +55,8 @@ public class PlaylistInfo {
         int numTracks = tracks.size();
         for (int i = 0; i < numTracks; i++) {
             String trackID = tracks.get(i).track.id;
+
+            // If the trackID is null that means it is a local file and track analysis cannot be obtained.
             if (trackID == null) {
                 continue;
             }
