@@ -10,7 +10,7 @@ import kaaes.spotify.webapi.android.models.Playlist;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 
 /** Stores and returns information about any playlist given the user's ID and the playlist's ID. */
-public class PlaylistHelper {
+public class PlaylistInfo {
     /** The current playlist. */
     private Playlist playlist;
     /** A List of PlaylistTracks representing all of the tracks of the playlist. */
@@ -41,12 +41,12 @@ public class PlaylistHelper {
     private int timeSignature;
 
     /**
-     * Creates a new PlaylistHelper to store relevant information about a Spotify playlist.
+     * Creates a new PlaylistInfo to store relevant information about a Spotify playlist.
      *
      * @param userID the user's unique ID
      * @param playlistID the playlist's unique ID
      */
-    PlaylistHelper(String userID, String playlistID) {
+    PlaylistInfo(String userID, String playlistID) {
         SpotifyService spotify = new SpotifyApi().getService();
         playlist = spotify.getPlaylist(userID, playlistID);
         tracks = playlist.tracks.items;
