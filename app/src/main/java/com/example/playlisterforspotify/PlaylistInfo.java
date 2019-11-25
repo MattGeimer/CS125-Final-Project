@@ -1,5 +1,6 @@
 package com.example.playlisterforspotify;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -97,11 +98,17 @@ public class PlaylistInfo {
     }
 
     /**
-     * Gets a List of PlaylistTracks representing the tracks of the playlist.
-     * @return list of PlaylistTrack objects
+     * Gets a List of IDs of all of the tracks of the playlist.
+     * @return list of track IDs
      */
-    public List<PlaylistTrack> getTracks() {
-        return tracks;
+    public List<String> getTracks() {
+        List<String> trackIDs = new ArrayList<>(tracks.size());
+
+        for (PlaylistTrack track : tracks) {
+            trackIDs.add(track.track.id);
+        }
+
+        return trackIDs;
     }
 
     /**
