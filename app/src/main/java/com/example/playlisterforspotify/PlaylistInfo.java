@@ -5,7 +5,6 @@ import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
-import kaaes.spotify.webapi.android.models.AudioFeaturesTrack;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Playlist;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
@@ -16,6 +15,8 @@ public class PlaylistInfo {
     private Playlist playlist;
     /** A List of PlaylistTracks representing all of the tracks of the playlist. */
     private List<PlaylistTrack> tracks;
+    /** If any of the songs in the playlist are explicit, the playlist is labeled as explicit. */
+    private boolean isExplicit;
     /** A confidence measure from 0.0 to 1.0 of whether the track is acoustic. */
     private float acousticness;
     /** A value of 0.0 is least danceable and 1.0 is most danceable. */
@@ -61,19 +62,24 @@ public class PlaylistInfo {
                 continue;
             }
 
-            AudioFeaturesTrack audio = spotify.getTrackAudioFeatures(trackID);
-            acousticness += audio.acousticness;
-            danceability += audio.danceability;
-            energy += audio.energy;
-            instrumentalness += audio.instrumentalness;
-            liveness += audio.liveness;
-            loudness += audio.loudness;
-            speechiness += audio.speechiness;
-            tempo += audio.tempo;
-            valence += audio.valence;
-            durationMs += audio.duration_ms;
-            key += audio.key;
-            timeSignature += audio.time_signature;
+            TrackInfo track = new TrackInfo(trackID);
+
+            if (track.isExplicit()) {
+                isExplicit = true;
+            }
+
+            acousticness += track.getAcousticness();
+            danceability += track.getDanceability();
+            energy += track.getEnergy();
+            instrumentalness += track.getInstrumentalness();
+            liveness += track.getLiveness();
+            loudness += track.getLoudness();
+            speechiness += track.getSpeechiness();
+            tempo += track.getTempo();
+            valence += track.getValence();
+            durationMs += track.getDurationMs();
+            key += track.getKey();
+            timeSignature += track.getTimeSignature();
         }
         if (numTracks > 1) {
             acousticness /= numTracks;
@@ -153,6 +159,13 @@ public class PlaylistInfo {
         return playlist.is_public;
     }
 
+    /**
+     * Gets whether or not any of the songs on the playlist are explicit
+     * @return true if explicit, false if not
+     */
+    public boolean isExplicit() {
+        return isExplicit;
+    }
     /**
      * A playlist can have either zero, one, or four different images.
      * <p>
