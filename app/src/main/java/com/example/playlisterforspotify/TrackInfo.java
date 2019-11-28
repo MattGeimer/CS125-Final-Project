@@ -9,9 +9,6 @@ import kaaes.spotify.webapi.android.models.ArtistSimple;
 import kaaes.spotify.webapi.android.models.AudioFeaturesTrack;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /** Stores and returns information about any track given the track's ID. */
 public class TrackInfo {
