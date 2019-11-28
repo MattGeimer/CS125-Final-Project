@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Playlister for Spotify</string>
+    <string name="placeholder_playlist_title">Joe\'s Playlist</string>
+    <string name="placeholder_playlist_author">Shared by: Joe</string>
+    <string name="content_desc_playlist_cover">Playlist Cover</string>
+    <string name="content_desc_expand">Expand</string>
+    <string name="content_desc_rate_up">Rate Up</string>
+    <string name="content_desc_rate_down">Rate Down</string>
 </resources>
