@@ -20,10 +20,13 @@ public class TrackInfo {
     /**
      * Creates a new TrackInfo to store relevant information about a Spotify track.
      *
+     * @param accessToken the access token acquired from authorization.
      * @param trackID the track's unique ID.
      */
-    TrackInfo(String trackID) {
-        SpotifyService spotify = new SpotifyApi().getService();
+    TrackInfo(String accessToken, String trackID) {
+        SpotifyApi api = new SpotifyApi();
+        api.setAccessToken(accessToken);
+        SpotifyService spotify = api.getService();
         track = spotify.getTrack(trackID);
         audio = spotify.getTrackAudioFeatures(trackID);
     }

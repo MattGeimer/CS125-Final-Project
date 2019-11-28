@@ -45,11 +45,14 @@ public class PlaylistInfo {
     /**
      * Creates a new PlaylistInfo to store relevant information about a Spotify playlist.
      *
+     * @param accessToken the access token acquired from authorization.
      * @param userID the user's unique ID
      * @param playlistID the playlist's unique ID
      */
-    PlaylistInfo(String userID, String playlistID) {
-        SpotifyService spotify = new SpotifyApi().getService();
+    PlaylistInfo(String accessToken, String userID, String playlistID) {
+        SpotifyApi api = new SpotifyApi();
+        api.setAccessToken(accessToken);
+        SpotifyService spotify = api.getService();
         playlist = spotify.getPlaylist(userID, playlistID);
         tracks = playlist.tracks.items;
 
@@ -62,7 +65,7 @@ public class PlaylistInfo {
                 continue;
             }
 
-            TrackInfo track = new TrackInfo(trackID);
+            TrackInfo track = new TrackInfo(accessToken, trackID);
 
             if (track.isExplicit()) {
                 isExplicit = true;
