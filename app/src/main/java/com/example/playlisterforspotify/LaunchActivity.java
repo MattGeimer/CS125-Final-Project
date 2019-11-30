@@ -2,6 +2,7 @@ package com.example.playlisterforspotify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,10 @@ public class LaunchActivity extends AppCompatActivity {
                             .build(),
                     RC_SIGN_IN);
             finish();
+        });
+        Button spotifyLoginButton = findViewById(R.id.spotifyLogin);
+        spotifyLoginButton.setOnClickListener(unused -> {
+            Log.i("Spotify Log In Button", "Spotify log in button pressed");
         });
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
