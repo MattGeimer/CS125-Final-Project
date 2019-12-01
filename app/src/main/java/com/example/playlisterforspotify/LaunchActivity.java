@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.spotify.sdk.android.authentication.AuthenticationRequest;
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,13 +40,9 @@ public class LaunchActivity extends AppCompatActivity {
                     RC_SIGN_IN);
             finish();
         });
-        Button spotifyLoginButton = findViewById(R.id.spotifyLogin);
-        spotifyLoginButton.setOnClickListener(unused -> {
-            Log.i("Spotify Log In Button", "Spotify log in button pressed");
-        });
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SpotifyLoginActivity.class);
             startActivity(intent);
             finish();
         } else {
@@ -74,11 +73,10 @@ public class LaunchActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, SpotifyLoginActivity.class);
                 startActivity(intent);
                 finish();
             }
         }
     }
-
 }
