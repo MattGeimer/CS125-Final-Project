@@ -14,7 +14,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 public class SpotifyLoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 2;
     private static final String CLIENT_ID = "fc196430995343bab7b692075b6ab8f2";
-    private static final String REDIRECT_URI = "http://localhost:8888";
+    private static final String REDIRECT_URI = "playlisterforspotify://callback";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
