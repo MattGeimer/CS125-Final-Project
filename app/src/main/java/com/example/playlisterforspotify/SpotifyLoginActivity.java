@@ -28,6 +28,7 @@ public class SpotifyLoginActivity extends AppCompatActivity {
             AuthenticationRequest.Builder builder =
                     new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN,
                             REDIRECT_URI);
+            // These "scopes" represent the permissions the user grants the app
             builder.setScopes(new String[]{"playlist-read-private", "playlist-modify-public",
                     "playlist-modify-private"});
             AuthenticationRequest request = builder.build();
