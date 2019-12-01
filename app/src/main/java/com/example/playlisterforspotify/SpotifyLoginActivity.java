@@ -3,7 +3,9 @@ package com.example.playlisterforspotify;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,20 +23,7 @@ public class SpotifyLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spotify_login);
 
-        Button spotifyLoginButton = findViewById(R.id.spotifyLogin);
-        spotifyLoginButton.setOnClickListener(unused -> {
-            Log.i("Spotify Log In Button", "Spotify log in button pressed");
-
-            AuthenticationRequest.Builder builder =
-                    new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN,
-                            REDIRECT_URI);
-            // These "scopes" represent the permissions the user grants the app
-            builder.setScopes(new String[]{"playlist-read-private", "playlist-modify-public",
-                    "playlist-modify-private"});
-            AuthenticationRequest request = builder.build();
-
-            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
-        });
+        makeAuthRequest();
     }
 
     /**
@@ -57,16 +46,36 @@ public class SpotifyLoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                     break;
+
                 // Auth flow returned an error
                 case ERROR:
-                    // Handle error response
                     Log.e("Spotify auth flow error", response.getError());
-                    break;
+                    Toast.makeText(this, "An error has occurred. Please retry.", Toast.LENGTH_LONG).show();
+
                 // Auth flow probably cancelled
                 default:
-                    // Handle other cases
-
+                    Button spotifyLoginButton = findViewById(R.id.spotifyLogin);
+                    spotifyLoginButton.setVisibility(View.VISIBLE);
+                    spotifyLoginButton.setOnClickListener(unused -> {
+                        Log.i("Spotify Log In Button", "Spotify log in button pressed");
+                        makeAuthRequest();
+                    });
             }
         }
+    }
+
+    /**
+     * Makes the Spotify authorization request.
+     */
+    private void makeAuthRequest() {
+        AuthenticationRequest.Builder builder =
+                new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN,
+                        REDIRECT_URI);
+        // These "scopes" represent the permissions the user grants the app
+        builder.setScopes(new String[]{"playlist-read-private", "playlist-modify-public",
+                "playlist-modify-private"});
+        AuthenticationRequest request = builder.build();
+
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
 }
