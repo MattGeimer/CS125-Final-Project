@@ -3,94 +3,113 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/darker_gray"
-    android:paddingBottom="@dimen/fui_body_padding_bottom">
+    android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/playlistCover"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/playlistPreview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/content_desc_playlist_cover"
+        android:paddingBottom="@dimen/fui_body_padding_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/playlistTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:fontFamily="sans-serif-black"
-        android:lineSpacingExtra="0sp"
-        android:text="@string/placeholder_playlist_title"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:typeface="normal"
+        <ImageButton
+            android:id="@+id/playlistCover"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/content_desc_playlist_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+        <TextView
+            android:id="@+id/playlistTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="sans-serif-black"
+            android:lineSpacingExtra="0sp"
+            android:text="@string/placeholder_playlist_title"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:typeface="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playlistCover"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/playlistAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/placeholder_playlist_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playlistCover"
+            app:layout_constraintTop_toBottomOf="@+id/playlistTitle" />
+
+        <ImageButton
+            android:id="@+id/expand"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/content_desc_expand"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playlistAuthor"
+            app:srcCompat="@android:drawable/arrow_down_float" />
+
+        <ImageButton
+            android:id="@+id/rateUp"
+            android:layout_width="36dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/content_desc_rate_up"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toStartOf="@+id/rateDown"
+            app:layout_constraintStart_toStartOf="@+id/playlistTitle"
+            app:layout_constraintTop_toBottomOf="@+id/playlistAuthor"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+        <ImageButton
+            android:id="@+id/rateDown"
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/content_desc_rate_down"
+            android:tint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/playlistTitle"
+            app:layout_constraintTop_toBottomOf="@+id/playlistAuthor"
+            app:srcCompat="@drawable/minus" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlistTracks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playlistCover"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/playlistAuthor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/placeholder_playlist_author"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playlistCover"
-        app:layout_constraintTop_toBottomOf="@+id/playlistTitle" />
-
-    <ImageButton
-        android:id="@+id/expand"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:background="@android:color/darker_gray"
-        android:contentDescription="@string/content_desc_expand"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playlistAuthor"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
-    <ImageButton
-        android:id="@+id/rateUp"
-        android:layout_width="36dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@android:color/darker_gray"
-        android:contentDescription="@string/content_desc_rate_up"
-        android:tint="@android:color/white"
-        app:layout_constraintEnd_toStartOf="@+id/rateDown"
-        app:layout_constraintStart_toStartOf="@+id/playlistTitle"
-        app:layout_constraintTop_toBottomOf="@+id/playlistAuthor"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-    <ImageButton
-        android:id="@+id/rateDown"
-        android:layout_width="40dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@android:color/darker_gray"
-        android:contentDescription="@string/content_desc_rate_down"
-        android:tint="@android:color/white"
-        app:layout_constraintEnd_toEndOf="@+id/playlistTitle"
-        app:layout_constraintTop_toBottomOf="@+id/playlistAuthor"
-        app:srcCompat="@drawable/minus" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playlistPreview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
