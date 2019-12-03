@@ -68,6 +68,7 @@ public class SpotifyLoginActivity extends AppCompatActivity {
      * Makes the Spotify authorization request.
      */
     private void makeAuthRequest() {
+
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN,
                         REDIRECT_URI);
