@@ -36,6 +36,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
         List<PlaylistSimple> allMyPlaylists = spotify.getMyPlaylists().items;
         String myID = spotify.getMe().id;
 
+        // We only care about the playlists actually owned by the user, not the playlists the user follows.
         for (PlaylistSimple playlist : allMyPlaylists) {
             String playlistOwnerID = playlist.owner.id;
             if (playlistOwnerID.equals(myID)) {
