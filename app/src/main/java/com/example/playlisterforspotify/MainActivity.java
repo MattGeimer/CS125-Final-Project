@@ -2,17 +2,9 @@ package com.example.playlisterforspotify;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.List;
-
-import kaaes.spotify.webapi.android.models.PlaylistSimple;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -22,9 +14,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i("MainActivity", "Reached MainActivity.java onCreate");
 
         String accessToken = getIntent().getStringExtra("accessToken");
-
         LinearLayout playlistList = findViewById(R.id.playlistList);
 
+        new PopulateViewWithMyPlaylists(playlistList, this, accessToken).execute();
 
         /*
         //TODO: Replace this with code that fetches playlists
@@ -57,8 +49,5 @@ public class MainActivity extends AppCompatActivity {
             playlistList.addView(playlist);
         }
          */
-    }
-
-    private static class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<PlaylistSimple>> {
     }
 }
