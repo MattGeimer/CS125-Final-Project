@@ -61,43 +61,63 @@
         <ImageButton
             android:id="@+id/expand"
             android:layout_width="50dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="42dp"
-            android:layout_marginLeft="42dp"
+            android:layout_height="13dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_expand"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/rateDown"
+            app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/arrow_down_float" />
+
+        <Button
+            android:id="@+id/share"
+            android:layout_width="81dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginLeft="80dp"
+            android:text="@string/share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playlistCover" />
 
         <ImageButton
             android:id="@+id/rateUp"
             android:layout_width="36dp"
             android:layout_height="33dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_rate_up"
             android:tint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/playlistCover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_input_add" />
 
         <ImageButton
             android:id="@+id/rateDown"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_rate_down"
             android:tint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/rateUp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rateUp"
             app:srcCompat="@drawable/minus" />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="115dp"
+            android:layout_marginLeft="115dp"
+            android:text="@string/placeholder_score"
+            app:layout_constraintBottom_toTopOf="@+id/share"
+            app:layout_constraintStart_toEndOf="@+id/playlistCover" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
