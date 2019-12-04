@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,8 +24,8 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
 
     PopulateViewWithMyPlaylists(ViewGroup view, Context c, String token) {
         parent = new WeakReference<>(view);
-        accessToken = token;
         context = new WeakReference<>(c);
+        accessToken = token;
     }
 
     public List<PlaylistSimple> doInBackground(Void... voids) {
@@ -50,18 +51,16 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
     public void onPostExecute(List<PlaylistSimple> myPlaylists) {
         for (PlaylistSimple playlist : myPlaylists) {
             LayoutInflater inflater = (LayoutInflater) context.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View playlistView = inflater.inflate(R.layout.playlist_chunk, parent.get(), false);
+            View playlistView = inflater.inflate(R.layout.playlist_user_chunk, parent.get(), false);
 
-            ImageButton playlistCover = playlistView.findViewById(R.id.playlistCover);
-            TextView playlistTitle = playlistView.findViewById(R.id.playlistTitle);
-            TextView playlistAuthor = playlistView.findViewById(R.id.playlistAuthor);
-            ImageButton expand = playlistView.findViewById(R.id.expand);
-            ImageButton rateUp = playlistView.findViewById(R.id.rateUp);
-            ImageButton rateDown = playlistView.findViewById(R.id.rateDown);
+            ImageButton playlistCover = playlistView.findViewById(R.id.userPlaylistCover);
+            TextView playlistTitle = playlistView.findViewById(R.id.userPlaylistTitle);
+            ImageButton expand = playlistView.findViewById(R.id.userExpand);
+            Button share = playlistView.findViewById(R.id.userShare);
 
             playlistTitle.setText(playlist.name);
-            String authorText = "Shared by: " + playlist.owner.display_name;
-            playlistAuthor.setText(authorText);
+
+            new FillViewWithCoverImage(playlistCover).execute(playlist);
 
             parent.get().addView(playlistView);
         }
