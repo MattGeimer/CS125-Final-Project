@@ -23,6 +23,7 @@ public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
         view = new WeakReference<>(setView);
     }
 
+    @Override
     public Drawable doInBackground(Object... playlistOrAlbum) {
         Drawable noImage = new ColorDrawable(Color.TRANSPARENT);
 
@@ -63,6 +64,7 @@ public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
         }
     }
 
+    @Override
     public void onPostExecute(Drawable image) {
         view.get().setImageDrawable(image);
     }
