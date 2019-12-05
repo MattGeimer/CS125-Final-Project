@@ -1,5 +1,6 @@
 package com.example.playlisterforspotify;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
     private WeakReference<ViewGroup> parent;
     private WeakReference<Context> context;
     private String accessToken;
+    private String myID;
 
     PopulateViewWithMyPlaylists(ViewGroup view, Context c, String token) {
         parent = new WeakReference<>(view);
@@ -37,7 +39,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
 
         List<PlaylistSimple> ownedPlaylists = new ArrayList<>();
         List<PlaylistSimple> allMyPlaylists = spotify.getMyPlaylists().items;
-        String myID = spotify.getMe().id;
+        myID = spotify.getMe().id;
 
         // We only care about the playlists actually owned by the user, not the playlists the user follows.
         for (PlaylistSimple playlist : allMyPlaylists) {
@@ -60,11 +62,22 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             TextView playlistTitle = playlistView.findViewById(R.id.userPlaylistTitle);
             ImageButton expand = playlistView.findViewById(R.id.userExpand);
             Button share = playlistView.findViewById(R.id.userShare);
-            LinearLayout trackList = playlistView.findViewById(R.id.userTrackList);
+
 
             playlistTitle.setText(playlist.name);
 
             new FillViewWithCoverImage(playlistCover).execute(playlist);
+
+            parent.get().addView(playlistView);
+
+            LinearLayout trackList = new LinearLayout(context.get());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            trackList.setLayoutParams(layoutParams);
+            trackList.setOrientation(LinearLayout.VERTICAL);
+            trackList.setVisibility(View.GONE);
+            parent.get().addView(trackList);
+            new PopulateViewWithTracks(trackList, context.get(), playlist.id, myID, accessToken).execute();
 
             expand.setOnClickListener(arrow -> {
                 // Flip arrow by 180 degrees
@@ -76,8 +89,6 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                     trackList.setVisibility(View.VISIBLE);
                 }
             });
-
-            parent.get().addView(playlistView);
         }
     }
 }

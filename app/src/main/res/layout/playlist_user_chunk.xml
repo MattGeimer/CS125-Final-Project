@@ -82,14 +82,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userPlaylistPreview" />
 
-    <LinearLayout
-        android:id="@+id/userTrackList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/userPlaylistPreview"
-        app:layout_constraintStart_toStartOf="@+id/userPlaylistPreview"
-        app:layout_constraintTop_toBottomOf="parent">
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
