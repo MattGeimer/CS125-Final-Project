@@ -20,18 +20,30 @@ import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.PlaylistSimple;
 
+/** Populates a given view with the user's own playlists. */
 public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<PlaylistSimple>> {
     private WeakReference<ViewGroup> parent;
     private WeakReference<Context> context;
     private String accessToken;
     private String myID;
 
+    /**
+     * Initializes the view, context, and access token.
+     * @param view the view to put all of the playlists in
+     * @param c the application context (this)
+     * @param token the access token gained from authorization
+     */
     PopulateViewWithMyPlaylists(ViewGroup view, Context c, String token) {
         parent = new WeakReference<>(view);
         context = new WeakReference<>(c);
         accessToken = token;
     }
 
+    /**
+     * Gets info from the SpotifyApi about the user's playlist as well as the user's id.
+     * @param voids no arguments
+     * @return a List of the playlists belonging to the user
+     */
     @Override
     public List<PlaylistSimple> doInBackground(Void... voids) {
         SpotifyApi api = new SpotifyApi();
@@ -53,6 +65,10 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
         return ownedPlaylists;
     }
 
+    /**
+     * Updates the UI with the info about all of the user's playlists.
+     * @param myPlaylists the List of playlists returned by doInBackground
+     */
     @Override
     public void onPostExecute(List<PlaylistSimple> myPlaylists) {
         for (PlaylistSimple playlist : myPlaylists) {

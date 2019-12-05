@@ -20,6 +20,7 @@ import kaaes.spotify.webapi.android.models.ArtistSimple;
 import kaaes.spotify.webapi.android.models.PlaylistTrack;
 import kaaes.spotify.webapi.android.models.Track;
 
+/** Populates a given view with a playlist's tracks. */
 public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistTrack>> {
     private WeakReference<ViewGroup> parent;
     private WeakReference<Context> context;
@@ -27,6 +28,14 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
     private String userID;
     private String accessToken;
 
+    /**
+     * Initializes the view, context, playlist id, user id, and access token.
+     * @param view view to populate with tracks
+     * @param c the application context
+     * @param plistID the ID of the playlist
+     * @param uID the ID of the user who owns the playlist
+     * @param token the access token
+     */
     PopulateViewWithTracks(ViewGroup view, Context c, String plistID, String uID, String token) {
         parent = new WeakReference<>(view);
         context = new WeakReference<>(c);
@@ -35,6 +44,11 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
         accessToken = token;
     }
 
+    /**
+     * Gets info from SpotifyApi about the playlist's tracks.
+     * @param voids no arguments
+     * @return a List of all the tracks in the playlist
+     */
     @Override
     public List<PlaylistTrack> doInBackground(Void... voids) {
         SpotifyApi api = new SpotifyApi();
@@ -44,6 +58,10 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
         return spotify.getPlaylistTracks(userID, playlistID).items;
     }
 
+    /**
+     * Updates UI with info about each track.
+     * @param tracks the list of tracks returned by doInBackground
+     */
     @Override
     public void onPostExecute(List<PlaylistTrack> tracks) {
         for (PlaylistTrack playlistTrack : tracks) {
@@ -58,6 +76,7 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
 
             songTitle.setText(track.name);
 
+            // Using a StringBuilder as concatenating within a for loop is not recommended
             StringBuilder artistString = new StringBuilder(artists.get(0).name);
             if (artists.size() == 2) {
                 String artist = " and " + artists.get(1).name;

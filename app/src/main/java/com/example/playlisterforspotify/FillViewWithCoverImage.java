@@ -16,13 +16,24 @@ import kaaes.spotify.webapi.android.models.AlbumSimple;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.PlaylistBase;
 
+/** Fills a given view with an album or playlist cover. */
 public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
     private WeakReference<ImageView> view;
 
+    /**
+     * Initializes the ImageView in which the image will show.
+     * @param setView the ImageView (or ImageButton) you wish to fill with cover art
+     */
     FillViewWithCoverImage(ImageView setView) {
         view = new WeakReference<>(setView);
     }
 
+    /**
+     * Creates a Drawable from the url of a playlist or album's image
+     * @param playlistOrAlbum a single descendant of PlaylistBase or AlbumSimple,
+     *                        wherever the cover art comes from.
+     * @return a Drawable containing the album art or a blank Drawable if incorrect argument or no image
+     */
     @Override
     public Drawable doInBackground(Object... playlistOrAlbum) {
         Drawable noImage = new ColorDrawable(Color.TRANSPARENT);
@@ -64,6 +75,10 @@ public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
         }
     }
 
+    /**
+     * Sets the image of the given view to the cover art.
+     * @param image the Drawable returned from doInBackground
+     */
     @Override
     public void onPostExecute(Drawable image) {
         view.get().setImageDrawable(image);
