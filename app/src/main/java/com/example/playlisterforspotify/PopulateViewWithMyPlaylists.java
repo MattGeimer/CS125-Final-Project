@@ -70,6 +70,8 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
 
             parent.get().addView(playlistView);
 
+            /* A new LinearLayout must be made to hold the tracks;
+                the view must exist before tracks can be added to it. */
             LinearLayout trackList = new LinearLayout(context.get());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
