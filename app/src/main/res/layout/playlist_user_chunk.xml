@@ -54,6 +54,7 @@
             android:layout_marginLeft="206dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_expand"
+            android:rotation="0"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userPlaylistCover"

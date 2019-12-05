@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -28,6 +29,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
         accessToken = token;
     }
 
+    @Override
     public List<PlaylistSimple> doInBackground(Void... voids) {
         SpotifyApi api = new SpotifyApi();
         api.setAccessToken(accessToken);
@@ -48,6 +50,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
         return ownedPlaylists;
     }
 
+    @Override
     public void onPostExecute(List<PlaylistSimple> myPlaylists) {
         for (PlaylistSimple playlist : myPlaylists) {
             LayoutInflater inflater = (LayoutInflater) context.get().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,10 +60,22 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             TextView playlistTitle = playlistView.findViewById(R.id.userPlaylistTitle);
             ImageButton expand = playlistView.findViewById(R.id.userExpand);
             Button share = playlistView.findViewById(R.id.userShare);
+            LinearLayout trackList = playlistView.findViewById(R.id.userTrackList);
 
             playlistTitle.setText(playlist.name);
 
             new FillViewWithCoverImage(playlistCover).execute(playlist);
+
+            expand.setOnClickListener(arrow -> {
+                // Flip arrow by 180 degrees
+                arrow.setRotation(arrow.getRotation() + 180);
+
+                if (trackList.getVisibility() == View.VISIBLE) {
+                    trackList.setVisibility(View.GONE);
+                } else {
+                    trackList.setVisibility(View.VISIBLE);
+                }
+            });
 
             parent.get().addView(playlistView);
         }
