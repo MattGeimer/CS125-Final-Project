@@ -1,7 +1,8 @@
 package com.example.playlisterforspotify;
 
-import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,11 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             playlistTitle.setText(playlist.name);
 
             new FillViewWithCoverImage(playlistCover).execute(playlist);
+            playlistCover.setOnClickListener(unused -> {
+                String url = playlist.external_urls.get("spotify");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                context.get().startActivity(intent);
+            });
 
             parent.get().addView(playlistView);
 

@@ -1,7 +1,10 @@
 package com.example.playlisterforspotify;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +73,15 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
             songArtist.setText(artistString);
 
             new FillViewWithCoverImage(albumCover).execute(track.album);
+            albumCover.setOnClickListener(unused -> {
+                try {
+                    String url = track.external_urls.get("spotify");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    context.get().startActivity(intent);
+                } catch(NullPointerException e) {
+                    Log.e("No URL found for track", track.name);
+                }
+            });
 
             parent.get().addView(tracklistView);
         }
