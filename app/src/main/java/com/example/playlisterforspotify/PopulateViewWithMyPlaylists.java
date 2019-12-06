@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -79,11 +81,12 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             TextView playlistTitle = playlistView.findViewById(R.id.userPlaylistTitle);
             ImageButton expand = playlistView.findViewById(R.id.userExpand);
             Button share = playlistView.findViewById(R.id.userShare);
+            ProgressBar progress = playlistView.findViewById(R.id.userPlaylistCoverProgress);
 
 
             playlistTitle.setText(playlist.name);
 
-            new FillViewWithCoverImage(playlistCover).execute(playlist);
+            new FillViewWithCoverImage(playlistCover, progress).execute(playlist);
             playlistCover.setOnClickListener(unused -> {
                 String url = playlist.external_urls.get("spotify");
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -101,9 +104,16 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             trackList.setOrientation(LinearLayout.VERTICAL);
             trackList.setVisibility(View.GONE);
             parent.get().addView(trackList);
-            new PopulateViewWithTracks(trackList, context.get(), playlist.id, myID, accessToken).execute();
+            PopulateViewWithTracks populater = new PopulateViewWithTracks(trackList, context.get(), playlist.id, myID, accessToken);
 
             expand.setOnClickListener(arrow -> {
+                try {
+                    populater.execute();
+                } catch(IllegalStateException e) {
+                    // The tracklist has already been made
+                    Log.i("P.V.W/Tracks not called", "already executed");
+                }
+
                 // Flip arrow by 180 degrees
                 arrow.setRotation(arrow.getRotation() + 180);
 

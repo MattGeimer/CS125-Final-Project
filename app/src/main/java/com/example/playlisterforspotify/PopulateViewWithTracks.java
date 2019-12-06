@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -71,6 +72,7 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
             ImageButton albumCover = tracklistView.findViewById(R.id.albumCover);
             TextView songTitle = tracklistView.findViewById(R.id.songTitle);
             TextView songArtist = tracklistView.findViewById(R.id.songArtist);
+            ProgressBar progress = tracklistView.findViewById(R.id.albumCoverProgress);
             Track track = playlistTrack.track;
             List<ArtistSimple> artists = track.artists;
 
@@ -91,13 +93,13 @@ public class PopulateViewWithTracks extends AsyncTask<Void, Void, List<PlaylistT
             }
             songArtist.setText(artistString);
 
-            new FillViewWithCoverImage(albumCover).execute(track.album);
+            new FillViewWithCoverImage(albumCover, progress).execute(track.album);
             albumCover.setOnClickListener(unused -> {
                 try {
                     String url = track.external_urls.get("spotify");
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     context.get().startActivity(intent);
-                } catch(NullPointerException e) {
+                } catch (NullPointerException e) {
                     Log.e("No URL found for track", track.name);
                 }
             });
