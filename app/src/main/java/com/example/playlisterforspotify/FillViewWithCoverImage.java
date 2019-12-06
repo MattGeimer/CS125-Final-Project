@@ -5,7 +5,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -19,13 +21,16 @@ import kaaes.spotify.webapi.android.models.PlaylistBase;
 /** Fills a given view with an album or playlist cover. */
 public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
     private WeakReference<ImageView> view;
+    private WeakReference<ProgressBar> progress;
 
     /**
      * Initializes the ImageView in which the image will show.
      * @param setView the ImageView (or ImageButton) you wish to fill with cover art
+     * @param progressBar the ProgressBar which will animate while the cover art loads
      */
-    FillViewWithCoverImage(ImageView setView) {
+    FillViewWithCoverImage(ImageView setView, ProgressBar progressBar) {
         view = new WeakReference<>(setView);
+        progress = new WeakReference<>(progressBar);
     }
 
     /**
@@ -81,6 +86,10 @@ public class FillViewWithCoverImage extends AsyncTask<Object, Void, Drawable> {
      */
     @Override
     public void onPostExecute(Drawable image) {
-        view.get().setImageDrawable(image);
+        if (view.get() != null) {
+            progress.get().setVisibility(View.GONE);
+            view.get().setImageDrawable(image);
+            view.get().setVisibility(View.VISIBLE);
+        }
     }
 }
