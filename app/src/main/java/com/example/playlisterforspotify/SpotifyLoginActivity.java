@@ -41,7 +41,7 @@ public class SpotifyLoginActivity extends AppCompatActivity {
             switch(response.getType()) {
                 // Response was successful and contains auth token
                 case TOKEN:
-                    Intent intent = new Intent(this, MainActivity.class);
+                    Intent intent = new Intent(this, LaunchActivity.class);
                     intent.putExtra("accessToken", response.getAccessToken());
                     startActivity(intent);
                     finish();

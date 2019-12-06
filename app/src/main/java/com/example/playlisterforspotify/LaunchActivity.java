@@ -1,6 +1,7 @@
 package com.example.playlisterforspotify;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -8,12 +9,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class LaunchActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabase;
+
+    private String accessToken;
+
+    private class getUserData extends AsyncTask<Void, Void, String> {
+        @Override
+        public String doInBackground(Void ... Voids) {
+            accessToken = getIntent().getStringExtra("accessToken");
+
+        }
+    }
 
     /**Request code.*/
     private static final int RC_SIGN_IN = 1;
@@ -68,6 +84,13 @@ public class LaunchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
+            //if (resultCode == RESULT_FIRST_USER) {
+//                mDatabase = FirebaseDatabase.getInstance().getReference();
+//                mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("playlists").setValue(
+//                        //TODO: JSON OBJECT THAT HOLDS DATA
+//
+//                )
+            //} else
             if (resultCode == RESULT_OK) {
                 Intent intent = new Intent(this, SpotifyLoginActivity.class);
                 startActivity(intent);
