@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Playlister for Spotify</string>
+    <string name="step_1">Step 1: Log in to Spotify</string>
+    <string name="step_2">Step 2: Log in to Firebase</string>
     <string name="placeholder_playlist_title">Joe\'s Playlist</string>
     <string name="placeholder_playlist_author">Shared by: Joe</string>
     <string name="placeholder_song_title">Joe\'s Song</string>
