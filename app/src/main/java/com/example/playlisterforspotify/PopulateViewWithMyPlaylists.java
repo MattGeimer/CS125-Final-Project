@@ -13,10 +13,21 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -82,6 +93,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             ImageButton expand = playlistView.findViewById(R.id.userExpand);
             Button share = playlistView.findViewById(R.id.userShare);
             ProgressBar progress = playlistView.findViewById(R.id.userPlaylistCoverProgress);
+            TextView score = playlistView.findViewById(R.id.userPlaylistScore);
 
 
             playlistTitle.setText(playlist.name);
@@ -123,6 +135,44 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                     trackList.setVisibility(View.VISIBLE);
                 }
             });
+
+            // If playlist has already been showed, show its score. Else, give the user the option to share.
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("shared-playlists");
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(playlist.id)) {
+                        showScore(dataSnapshot);
+                    } else {
+                        share.setVisibility(View.VISIBLE);
+                        share.setOnClickListener(unused -> {
+                            ref.child(playlist.id).setValue(0);
+                            share.setVisibility(View.GONE);
+                            showScore(dataSnapshot);
+                            Toast.makeText(context.get(), "Shared!", Toast.LENGTH_LONG).show();
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("Database Error", databaseError.getMessage());
+                }
+
+                private void showScore(@NonNull DataSnapshot dataSnapshot) {
+                    Long rating = 0L;
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        if (childSnapshot.getKey().equals(playlist.id)) {
+                            rating = childSnapshot.getValue(Long.class);
+                            break;
+                        }
+                    }
+                    score.setText(String.format(Locale.getDefault(), "%d", rating));
+                    score.setVisibility(View.VISIBLE);
+                }
+            });
+
         }
     }
 }
