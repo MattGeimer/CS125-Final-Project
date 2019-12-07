@@ -7,6 +7,6 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Step 1: Log in to Firebase" />
+        android:text="@string/step_2" />
 
 </LinearLayout>

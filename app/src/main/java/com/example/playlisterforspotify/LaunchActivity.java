@@ -9,25 +9,48 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.PlaylistSimple;
+
 public class LaunchActivity extends AppCompatActivity {
+    private static String accessToken;
+    private static String myID;
 
-    private DatabaseReference mDatabase;
-
-    private String accessToken;
-
-    private class getUserData extends AsyncTask<Void, Void, String> {
+    private static class GetNewUserData extends AsyncTask<Void, Void, List<String>> {
         @Override
-        public String doInBackground(Void ... Voids) {
-            accessToken = getIntent().getStringExtra("accessToken");
+        public List<String> doInBackground(Void ... Voids) {
+            SpotifyApi api = new SpotifyApi();
+            api.setAccessToken(accessToken);
+            SpotifyService spotify = api.getService();
 
+            myID = spotify.getMe().id;
+
+            List<String> ownedPlaylistIDs = new ArrayList<>();
+            List<PlaylistSimple> allMyPlaylists = spotify.getMyPlaylists().items;
+            // We only care about the playlists actually owned by the user, not the playlists the user follows.
+            for (PlaylistSimple playlist : allMyPlaylists) {
+                String playlistOwnerID = playlist.owner.id;
+                if (playlistOwnerID.equals(myID)) {
+                    ownedPlaylistIDs.add(playlist.id);
+                }
+            }
+
+            return ownedPlaylistIDs;
+        }
+
+        @Override
+        public void onPostExecute(List<String> playlistIDs) {
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+            mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(myID);
         }
     }
 
@@ -38,6 +61,9 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        FirebaseAuth.getInstance().signOut();
+        accessToken = getIntent().getStringExtra("accessToken");
 
         Button loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(unused -> {
@@ -54,7 +80,8 @@ public class LaunchActivity extends AppCompatActivity {
         });
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent intent = new Intent(this, SpotifyLoginActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("accessToken", accessToken);
             startActivity(intent);
             finish();
         } else {
@@ -84,17 +111,19 @@ public class LaunchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-            //if (resultCode == RESULT_FIRST_USER) {
-//                mDatabase = FirebaseDatabase.getInstance().getReference();
-//                mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("playlists").setValue(
-//                        //TODO: JSON OBJECT THAT HOLDS DATA
-//
-//                )
-            //} else
             if (resultCode == RESULT_OK) {
-                Intent intent = new Intent(this, SpotifyLoginActivity.class);
-                startActivity(intent);
-                finish();
+                if (response.isNewUser()) {
+                    new GetNewUserData().execute();
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("accessToken", accessToken);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("accessToken", accessToken);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }
     }
