@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity {
-    //private PopulateViewWithMyPlaylists populater;
+public class MyProfileActivity extends AppCompatActivity {
+    private PopulateViewWithMyPlaylists populater;
     private LinearLayout playlistList;
     private String accessToken;
 
@@ -19,19 +19,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
-        Log.i("MainActivity", "Reached MainActivity.java onCreate");
+        Log.i("MyProfileActivity", "Reached MyProfileActivity.java onCreate");
 
         accessToken = getIntent().getStringExtra("accessToken");
         playlistList = findViewById(R.id.playlistList);
         SwipeRefreshLayout swipeRefresh = findViewById(R.id.refresh);
         TabLayout tabLayout = findViewById(R.id.tabs);
 
-        tabLayout.getTabAt(0).select();
+        tabLayout.getTabAt(1).select();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals(getString(R.string.my_profile))) {
-                    Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
+                if (tab.getText().equals(getString(R.string.community))) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("accessToken", accessToken);
                     startActivity(intent);
                     finish();
@@ -47,16 +47,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
-        //populater.execute();
+        populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
+        populater.execute();
         swipeRefresh.setOnRefreshListener(() -> refresh(swipeRefresh));
     }
 
     private void refresh(SwipeRefreshLayout refreshLayout) {
-        //populater.cancel(true);
+        populater.cancel(true);
         playlistList.removeAllViews();
-        //populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
-        //populater.execute();
+        populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
+        populater.execute();
         refreshLayout.setRefreshing(false);
     }
 }

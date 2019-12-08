@@ -12,4 +12,6 @@
     <string name="content_desc_rate_up">Rate Up</string>
     <string name="content_desc_rate_down">Rate Down</string>
     <string name="share">Share</string>
+    <string name="community">Community</string>
+    <string name="my_profile">My Profile</string>
 </resources>
