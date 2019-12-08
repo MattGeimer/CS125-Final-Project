@@ -138,7 +138,6 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
 
             // If playlist has already been showed, show its score. Else, give the user the option to share.
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("shared-playlists");
-            //.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -147,7 +146,9 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                     } else {
                         share.setVisibility(View.VISIBLE);
                         share.setOnClickListener(unused -> {
-                            ref.child(playlist.id).setValue(0);
+                            ref.child(playlist.id).child("rating").setValue(0);
+                            ref.child(playlist.id).child("firebase-user-id").setValue(
+                                    FirebaseAuth.getInstance().getCurrentUser().getUid());
                             share.setVisibility(View.GONE);
                             showScore(dataSnapshot);
                             Toast.makeText(context.get(), "Shared!", Toast.LENGTH_LONG).show();
@@ -164,7 +165,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                     Long rating = 0L;
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         if (childSnapshot.getKey().equals(playlist.id)) {
-                            rating = childSnapshot.getValue(Long.class);
+                            rating = childSnapshot.child("rating").getValue(Long.class);
                             break;
                         }
                     }
