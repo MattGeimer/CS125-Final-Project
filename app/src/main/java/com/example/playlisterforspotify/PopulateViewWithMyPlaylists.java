@@ -137,8 +137,8 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             });
 
             // If playlist has already been showed, show its score. Else, give the user the option to share.
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("shared-playlists");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("shared-playlists");
+            //.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
             ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
