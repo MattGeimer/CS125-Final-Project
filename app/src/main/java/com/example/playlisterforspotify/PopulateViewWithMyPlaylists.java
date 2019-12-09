@@ -149,6 +149,7 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                             ref.child(playlist.id).child("rating").setValue(0);
                             ref.child(playlist.id).child("firebase-user-id").setValue(
                                     FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            ref.child(playlist.id).child("playlist-id").setValue(playlist.id);
                             share.setVisibility(View.GONE);
                             showScore(dataSnapshot);
                             Toast.makeText(context.get(), "Shared!", Toast.LENGTH_LONG).show();
