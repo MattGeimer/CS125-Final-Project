@@ -112,7 +112,7 @@
             android:layout_marginRight="22dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_rate_down"
-            android:tint="@android:color/white"
+            android:tint="@color/white"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rateUp"

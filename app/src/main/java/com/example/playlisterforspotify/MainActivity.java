@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        setContentView(R.layout.activity_main);
         Log.i("MainActivity", "Reached MainActivity.java onCreate");
 
         accessToken = getIntent().getStringExtra("accessToken");
@@ -78,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-                populater = new PopulateViewWithPlaylists(playlistList, getApplicationContext(), playlists, accessToken);
-                populater.execute();
+                refresh(swipeRefresh);
             }
 
             @Override
@@ -92,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refresh(SwipeRefreshLayout refreshLayout) {
-        populater.cancel(true);
+        if (populater != null) {
+            populater.cancel(true);
+        }
         playlistList.removeAllViews();
         populater = new PopulateViewWithPlaylists(playlistList, this, playlists, accessToken);
         populater.execute();

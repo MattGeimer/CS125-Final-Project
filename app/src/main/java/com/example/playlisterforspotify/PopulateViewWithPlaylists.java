@@ -2,6 +2,8 @@ package com.example.playlisterforspotify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -135,10 +138,169 @@ public class PopulateViewWithPlaylists extends AsyncTask<Void, Void, HashMap<Pla
                     Long rating = dataSnapshot.getValue(Long.class);
                     score.setText(String.format(Locale.getDefault(), "%d", rating));
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.e("Database Error", databaseError.getMessage());
+                }
+            });
+
+            DatabaseReference myRatingsRef = FirebaseDatabase.getInstance().getReference()
+                    .child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("ratings");
+            myRatingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(playlist.id)) {
+                        if (dataSnapshot.child(playlist.id).getValue(Long.class) == 1) {
+                            rateDown.setTag(false);
+                            rateUp.setTag(true);
+                            rateUp.clearColorFilter();
+                            rateUp.setColorFilter(R.color.colorAccent, PorterDuff.Mode.SRC_IN);
+                        } else if (dataSnapshot.child(playlist.id).getValue(Long.class) == -1) {
+                            rateUp.setTag(false);
+                            rateDown.setTag(true);
+                            rateDown.clearColorFilter();
+                            rateDown.setColorFilter(R.color.colorAccentComplementary, PorterDuff.Mode.SRC_IN);
+                        } else {
+                            rateUp.setTag(false);
+                            rateDown.setTag(false);
+                            myRatingsRef.child(playlist.id).setValue(null);
+                        }
+                    } else {
+                        rateUp.setTag(false);
+                        rateDown.setTag(false);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("Database Error", databaseError.getMessage());
+                }
+            });
+
+            rateUp.setOnClickListener(unused -> {
+                if ((boolean) rateUp.getTag()) {
+                    rateUp.setTag(false);
+                    rateUp.clearColorFilter();
+                    rateUp.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(0);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) - 1;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
+                } else if ((boolean) rateDown.getTag()) {
+                    rateDown.setTag(false);
+                    rateDown.clearColorFilter();
+                    rateDown.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+                    rateUp.setTag(true);
+                    rateUp.clearColorFilter();
+                    rateUp.setColorFilter(R.color.colorAccent, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(1);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) + 2;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
+                } else {
+                    rateUp.setTag(true);
+                    rateUp.clearColorFilter();
+                    rateUp.setColorFilter(R.color.colorAccent, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(1);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) + 1;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
+                }
+            });
+
+            rateDown.setOnClickListener(unused -> {
+                if ((boolean) rateDown.getTag()) {
+                    rateDown.setTag(false);
+                    rateDown.clearColorFilter();
+                    rateDown.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(0);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) + 1;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
+                } else if ((boolean) rateUp.getTag()) {
+                    rateUp.setTag(false);
+                    rateUp.clearColorFilter();
+                    rateUp.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+                    rateDown.setTag(true);
+                    rateDown.clearColorFilter();
+                    rateDown.setColorFilter(R.color.colorAccentComplementary, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(-1);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) - 2;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
+                } else {
+                    rateDown.setTag(true);
+                    rateDown.clearColorFilter();
+                    rateDown.setColorFilter(R.color.colorAccent, PorterDuff.Mode.SRC_IN);
+
+                    myRatingsRef.child(playlist.id).setValue(-1);
+                    overallRatingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Long rating = dataSnapshot.getValue(Long.class) - 1;
+                            overallRatingRef.setValue(rating);
+                            score.setText(String.format(Locale.getDefault(), "%d", rating));
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("Database Error", databaseError.getMessage());
+                        }
+                    });
                 }
             });
         }
