@@ -15,6 +15,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:id="@+id/playlistCoverProgress"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.75"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/playlistCover"
             android:layout_width="120dp"
@@ -24,38 +38,40 @@
             android:layout_marginTop="16dp"
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_playlist_cover"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
         <TextView
             android:id="@+id/playlistTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
             android:fontFamily="sans-serif-black"
+            android:gravity="center_horizontal"
             android:lineSpacingExtra="0sp"
             android:text="@string/placeholder_playlist_title"
             android:textAllCaps="false"
             android:textSize="18sp"
             android:typeface="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/playlistCover"
+            app:layout_constraintEnd_toStartOf="@+id/rateUp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/playlistAuthor"
-            android:layout_width="wrap_content"
+            android:layout_width="210dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
             android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
             android:text="@string/placeholder_playlist_author"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/playlistCover"
+            app:layout_constraintEnd_toStartOf="@+id/rateDown"
             app:layout_constraintTop_toBottomOf="@+id/playlistTitle" />
 
         <ImageButton
@@ -67,19 +83,10 @@
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_expand"
             android:scaleType="fitCenter"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/arrow_down_float" />
-
-        <Button
-            android:id="@+id/share"
-            android:layout_width="81dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
-            android:text="@string/share"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/playlistCover" />
 
         <ImageButton
             android:id="@+id/rateUp"
@@ -91,6 +98,7 @@
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_rate_up"
             android:tint="@android:color/white"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_input_add" />
@@ -105,6 +113,7 @@
             android:background="#C9C9C9"
             android:contentDescription="@string/content_desc_rate_down"
             android:tint="@android:color/white"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rateUp"
             app:srcCompat="@drawable/minus" />
@@ -113,11 +122,12 @@
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="115dp"
-            android:layout_marginLeft="115dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginBottom="24dp"
             android:text="@string/placeholder_score"
-            app:layout_constraintBottom_toTopOf="@+id/share"
-            app:layout_constraintStart_toEndOf="@+id/playlistCover" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/playlistAuthor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

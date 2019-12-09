@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,7 +96,6 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
             ProgressBar progress = playlistView.findViewById(R.id.userPlaylistCoverProgress);
             TextView score = playlistView.findViewById(R.id.userPlaylistScore);
 
-
             playlistTitle.setText(playlist.name);
 
             new FillViewWithCoverImage(playlistCover, progress).execute(playlist);
@@ -146,9 +146,12 @@ public class PopulateViewWithMyPlaylists extends AsyncTask<Void, Void, List<Play
                     } else {
                         share.setVisibility(View.VISIBLE);
                         share.setOnClickListener(unused -> {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                             ref.child(playlist.id).child("rating").setValue(0);
-                            ref.child(playlist.id).child("firebase-user-id").setValue(
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            ref.child(playlist.id).child("firebase-user-id").setValue(user.getUid());
+                            ref.child(playlist.id).child("firebase-screenname").setValue(user.getDisplayName());
+                            ref.child(playlist.id).child("spotify-user-id").setValue(myID);
                             ref.child(playlist.id).child("playlist-id").setValue(playlist.id);
                             share.setVisibility(View.GONE);
                             showScore(dataSnapshot);

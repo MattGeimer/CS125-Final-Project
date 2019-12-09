@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,13 +19,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import kaaes.spotify.webapi.android.models.Playlist;
-
 public class MainActivity extends AppCompatActivity {
-    //private PopulateViewWithMyPlaylists populater;
+    private PopulateViewWithPlaylists populater;
     private LinearLayout playlistList;
     private String accessToken;
-    private ArrayList<MyPlaylist> playlists;
+    private ArrayList<StoredPlaylist> playlists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +66,20 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     for (DataSnapshot playlist : dataSnapshot.getChildren()) {
+                        String firebaseUID = playlist.child("firebase-user-id").getValue(String.class);
+                        String screenname = playlist.child("firebase-screenname").getValue(String.class);
+                        String spotifyUID = playlist.child("spotify-user-id").getValue(String.class);
+                        String playlistID = playlist.child("playlist-id").getValue(String.class);
                         Integer score = playlist.child("rating").getValue(Integer.class);
                         if (score != null) {
-                            MyPlaylist temp = new MyPlaylist(playlist.child("playlist-id").getValue(String.class), score);
-                            playlists.add(temp);
+                            StoredPlaylist storedPlaylist = new StoredPlaylist
+                                    (playlistID, firebaseUID, screenname, spotifyUID, score);
+                            playlists.add(storedPlaylist);
                         }
                     }
-                    for (int i = 0; i < playlists.size(); i++) {
-                        Log.i("mgeimer2", playlists.get(i).getID());
-                        Log.i("mgeimer2", "" + playlists.get(i).getScore());
-                    }
-                    //TODO: Load chunk using playlist object data and spotify API
                 }
+                populater = new PopulateViewWithPlaylists(playlistList, getApplicationContext(), playlists, accessToken);
+                populater.execute();
             }
 
             @Override
@@ -87,31 +88,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
-        //populater.execute();
         swipeRefresh.setOnRefreshListener(() -> refresh(swipeRefresh));
     }
 
     private void refresh(SwipeRefreshLayout refreshLayout) {
-        //populater.cancel(true);
+        populater.cancel(true);
         playlistList.removeAllViews();
-        //populater = new PopulateViewWithMyPlaylists(playlistList, this, accessToken);
-        //populater.execute();
+        populater = new PopulateViewWithPlaylists(playlistList, this, playlists, accessToken);
+        populater.execute();
         refreshLayout.setRefreshing(false);
     }
-
-    private class MyPlaylist {
-
-        private String id;
-        private int score;
-
-        public MyPlaylist(String id, int score) {
-            this.id = id;
-            this.score = score;
-        }
-        public String getID() {return id;}
-
-        public int getScore() {return score;}
-    }
-
 }

@@ -80,8 +80,6 @@ public class LaunchActivity extends AppCompatActivity {
                     DatabaseReference user = mDatabase.child(uID);
                     DatabaseReference ratings = user.child("ratings");
                     ratings.child("temp").setValue(0);
-                    //DatabaseReference sharedPlaylists = mDatabase.child("shared-playlists").child(uID);
-                    //sharedPlaylists.child("temp").setValue(0);
 
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("accessToken", accessToken);
